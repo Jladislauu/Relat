@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory
+
 from flask_sqlalchemy import SQLAlchemy
 import os
 from reportlab.lib.pagesizes import A4
@@ -41,10 +42,15 @@ def do_login():
     password = request.form['password']
     user = User.query.filter_by(username=username, password=password).first()
     if user:
-        return redirect(url_for('report'))
+        return redirect(url_for('menu'))
     else:
         error = 'Usuário ou senha incorretos.'
         return render_template('login.html', error=error)
+
+# Rota para a página de menu principal
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
 
 # Rota para a página de relatório
 @app.route('/report')
@@ -90,8 +96,6 @@ def relatorios():
     reports = Report.query.all()
     return render_template('relatorios.html', reports=reports)
 
-
-
 # Rota para visualizar o PDF
 @app.route('/visualizar_relatorio/<filename>')
 def visualizar_relatorio(filename):
@@ -111,7 +115,6 @@ def visualizar_ultimo_relatorio():
         flash('Nenhum relatório foi gerado ainda.', 'error')
         return redirect(url_for('report'))
 
-
 # Rota para buscar e exibir todos os relatórios emitidos
 @app.route('/buscar_relatorios')
 def buscar_relatorios():
@@ -119,6 +122,15 @@ def buscar_relatorios():
     reports = Report.query.all()
     return render_template('relatorios.html', reports=reports)
 
+# Rota para a página de perfil
+@app.route('/perfil')
+def perfil():
+    return render_template('perfil.html')
+
+# Rota para a página de clientes
+@app.route('/clientes')
+def clientes():
+    return render_template('clientes.html')
 
 if __name__ == '__main__':
     with app.app_context():

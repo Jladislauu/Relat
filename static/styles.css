@@ -41,3 +41,26 @@ button {
 button:hover {
     background-color: #45a049;
 }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    margin: 10px 0;
+}
+
+ul li a {
+    display: block;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+ul li a:hover {
+    background-color: #45a049;
+}
