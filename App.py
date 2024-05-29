@@ -112,9 +112,10 @@ def visualizar_ultimo_relatorio():
         return redirect(url_for('report'))
 
 
-# Rota para listar todos os relatórios emitidos
-@app.route('/listar_relatorios')
-def listar_relatorios():
+# Rota para buscar e exibir todos os relatórios emitidos
+@app.route('/buscar_relatorios')
+def buscar_relatorios():
+    # Consulta todos os relatórios na base de dados
     reports = Report.query.all()
     return render_template('relatorios.html', reports=reports)
 
