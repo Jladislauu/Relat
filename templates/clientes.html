@@ -1,15 +1,36 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clientes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h2>Clientes</h2>
-        <!-- Lista de clientes cadastrados -->
-    </div>
+    <h1>Clientes</h1>
+    <h2>Novo Cliente</h2>
+    <form action="{{ url_for('cadastrar_cliente') }}" method="POST">
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="address">Endereço:</label>
+        <input type="text" id="address" name="address"><br>
+        <label for="phone">Telefone:</label>
+        <input type="text" id="phone" name="phone"><br>
+        <input type="submit" value="Cadastrar Cliente">
+    </form>
+    <h2>Clientes Cadastrados</h2>
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Endereço</th>
+            <th>Telefone</th>
+        </tr>
+        {% for client in clients %}
+        <tr>
+            <td><a href="{{ url_for('perfil_cliente', client_id=client.id) }}">{{ client.name }}</a></td>
+            <td>{{ client.address }}</td>
+            <td>{{ client.phone }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>

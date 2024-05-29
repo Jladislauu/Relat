@@ -42,11 +42,14 @@ def do_login():
     password = request.form['password']
     user = User.query.filter_by(username=username, password=password).first()
     if user:
+        # Armazenar o ID do usuário na sessão
+        session['user_id'] = user.id
         return redirect(url_for('menu'))
     else:
         error = 'Usuário ou senha incorretos.'
         return render_template('login.html', error=error)
 
+    
 # Rota para a página de menu principal
 @app.route('/menu')
 def menu():
@@ -125,12 +128,80 @@ def buscar_relatorios():
 # Rota para a página de perfil
 @app.route('/perfil')
 def perfil():
-    return render_template('perfil.html')
+    # Obtém o ID do usuário a partir da sessão
+    user_id = session.get('user_id')
+    
+    # Verifica se o usuário está autenticado
+    if user_id:
+        # Obtém os dados do usuário do banco de dados com base no ID
+        user = User.query.get(user_id)
+        if user:
+            # Se o usuário for encontrado, renderiza a página de perfil com os dados do usuário
+            return render_template('perfil.html', user=user)
+        else:
+            flash('Usuário não encontrado.', 'error')
+            return redirect(url_for('login'))
+    else:
+        # Se o usuário não estiver autenticado, redireciona para a página de login
+        flash('Faça login para acessar o perfil.', 'error')
+        return redirect(url_for('login'))
+@app.route('/atualizar_perfil', methods=['POST'])
+def atualizar_perfil():
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        if user:
+            # Atualiza o nome de usuário e a senha com os novos valores do formulário
+            user.username = request.form['username']
+            user.password = request.form['password']
+            db.session.commit()
+            flash('Perfil atualizado com sucesso.', 'success')
+            return redirect(url_for('perfil'))
+        else:
+            flash('Usuário não encontrado.', 'error')
+            return redirect(url_for('login'))
+    else:
+        flash('Faça login para acessar o perfil.', 'error')
+        return redirect(url_for('login'))
+    
+    
 
 # Rota para a página de clientes
 @app.route('/clientes')
 def clientes():
-    return render_template('clientes.html')
+    clients = Client.query.all()
+    return render_template('clientes.html', clients=clients)
+
+
+class Client(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    address = db.Column(db.String(200))
+    phone = db.Column(db.String(20))
+
+@app.route('/cadastrar_cliente', methods=['POST'])
+def cadastrar_cliente():
+    name = request.form['name']
+    address = request.form['address']
+    phone = request.form['phone']
+    new_client = Client(name=name, address=address, phone=phone)
+    db.session.add(new_client)
+    db.session.commit()
+    flash('Cliente cadastrado com sucesso.', 'success')
+    return redirect(url_for('clientes'))
+
+@app.route('/perfil_cliente/<int:client_id>')
+def perfil_cliente(client_id):
+    # Consulta o cliente pelo ID
+    client = Client.query.get(client_id)
+    if client:
+        # Consulta os relatórios associados a este cliente
+        client_reports = Report.query.filter_by(client=client.name).all()
+        return render_template('perfil_cliente.html', client=client, client_reports=client_reports)
+    else:
+        flash('Cliente não encontrado.', 'error')
+        return redirect(url_for('clientes'))
+
 
 if __name__ == '__main__':
     with app.app_context():
