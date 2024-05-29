@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Relatório - Relat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Gerar Relatório</h2>
+        <form method="POST" action="/generate_report">
+            <label for="client">Cliente:</label>
+            <input type="text" id="client" name="client" required>
+            <label for="service">Serviço Realizado:</label>
+            <input type="text" id="service" name="service" required>
+            <label for="date">Data:</label>
+            <input type="text" id="date" name="date" required>
+            <label for="description">Descrição:</label>
+            <input type="text" id="description" name="description">
+            <button type="submit">Gerar Relatório</button>
+
+            <!-- Botão para visualizar o último relatório gerado -->
+            <a href="{{ url_for('visualizar_ultimo_relatorio') }}" class="button">Visualizar Último Relatório Gerado</a>
+
+            <!-- Botão para listar todos os relatórios emitidos -->
+            <a href="{{ url_for('listar_relatorios') }}" class="button">Listar Relatórios Emitidos</a>
+        </form>
+        {% if message %}
+        <p style="color: green;">{{ message }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

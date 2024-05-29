@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios Emitidos</title>
+</head>
+<body>
+    <h1>Relatórios Emitidos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Serviço Realizado</th>
+                <th>Data</th>
+                <!-- Adicione mais colunas conforme necessário -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td>{{ report.client }}</td>
+                <td>{{ report.service }}</td>
+                <td>{{ report.date }}</td>
+                <!-- Adicione mais colunas conforme necessário -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Adicione um link ou botão para voltar à página de geração de relatórios -->
+    <a href="{{ url_for('report') }}">Voltar para Gerar Relatório</a>
+</body>
+</html>
