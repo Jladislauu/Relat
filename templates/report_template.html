@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Relatório</h1>
+    <p><strong>Cliente:</strong> {{ client }}</p>
+    <p><strong>Contato:</strong> {{ contact }}</p>
+    <p><strong>Endereço de Instalação:</strong> {{ installation_address }}</p>
+    <p><strong>Descrição do Trabalho:</strong> {{ work_description }}</p>
+    <p><strong>Data de Início:</strong> {{ start_date }}</p>
+    <p><strong>Data de Término:</strong> {{ end_date }}</p>
+    <p><strong>Número da Ordem de Serviço:</strong> {{ work_order_number }}</p>
+    <p><strong>Descrição Geral:</strong> {{ general_description }}</p>
+    <p><strong>Descrição do Ambiente:</strong> {{ environment_description }}</p>
+    <p><strong>Tipo de Teto:</strong> {{ ceiling_type }}</p>
+    <p><strong>Altura do Teto:</strong> {{ ceiling_height }}</p>
+    <p><strong>Largura:</strong> {{ width }}</p>
+    <p><strong>Profundidade:</strong> {{ depth }}</p>
+    <p><strong>Tipo de Parede:</strong> {{ wall_type }}</p>
+    <p><strong>Piso Elevado:</strong> {{ elevated_floor }}</p>
+    <p><strong>Laje:</strong> {{ slab }}</p>
+    <p><strong>Tipos de Cabos:</strong> {{ cable_types }}</p>
+    <p><strong>Tipos de Conectores:</strong> {{ connector_types }}</p>
+    <p><strong>Equipamento:</strong> {{ equipment }}</p>
+</body>
+</html>

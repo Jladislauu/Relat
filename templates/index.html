@@ -24,8 +24,6 @@
             <input type="text" id="end_date" name="end_date" required>
             <label for="work_order_number">Número da Ordem de Serviço:</label>
             <input type="text" id="work_order_number" name="work_order_number" required>
-            <label for="service">Serviço Realizado:</label>
-            <input type="text" id="service" name="service" required>
             <label for="general_description">Descrições Gerais:</label>
             <textarea id="general_description" name="general_description" required></textarea>
             <label for="environment_description">Descrições de Ambiente:</label>
@@ -48,26 +46,4 @@
             <textarea id="cable_types" name="cable_types" required></textarea>
             <label for="connector_types">Tipos de Conectores e Quantidade:</label>
             <textarea id="connector_types" name="connector_types" required></textarea>
-            <label for="equipment">Equipamentos a Serem Instalados:</label>
-            <textarea id="equipment" name="equipment" required></textarea>
-            <button type="submit">Gerar Relatório</button>
-            
-
-            <!-- Botão para visualizar o último relatório gerado -->
-            <a href="{{ url_for('visualizar_ultimo_relatorio') }}" class="button">Visualizar Último Relatório Gerado</a>
-
-            <!-- Botão para listar todos os relatórios emitidos -->
-            <a href="{{ url_for('buscar_relatorios') }}" class="button">Listar Relatórios Emitidos</a>
-        </form>
-        {% if message %}
-        <p style="color: green;">{{ message }}</p>
-        {% endif %}
-    </div>
-    <div>
-        {% extends 'base.html' %}
-    {% block content %}
-    {% include 'redirecionamento.html' %}
-    {% endblock %}
-        <div>
-</body>
-</html>
+            <label for="equipment">Equipam

@@ -1,12 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory
-
 from flask_sqlalchemy import SQLAlchemy
 import os
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from weasyprint import HTML
+
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 # Configuração do banco de dados MySQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@127.0.0.1/relat_db'
@@ -26,7 +35,7 @@ class User(db.Model):
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)  
     client = db.Column(db.String(120), nullable=False)
-    service = db.Column(db.String(120), nullable=False)
+    service = db.Column(db.String(120), nullable=True)
     date = db.Column(db.String(10), nullable=False)
     description = db.Column(db.String(500))
     filename = db.Column(db.String(120), nullable=False)
@@ -60,38 +69,49 @@ def menu():
 def report():
     return render_template('report.html')
 
-# Rota para gerar relatório
 @app.route('/generate_report', methods=['POST'])
 def generate_report():
     client = request.form['client']
-    service = request.form['service']
-    date = request.form['date']
-    description = request.form.get('description', 'N/A')
+    contact = request.form['contact']
+    installation_address = request.form['installation_address']
+    work_description = request.form['work_description']
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
+    work_order_number = request.form['work_order_number']
+    general_description = request.form['general_description']
+    environment_description = request.form['environment_description']
+    ceiling_type = request.form['ceiling_type']
+    ceiling_height = request.form['ceiling_height']
+    width = request.form['width']
+    depth = request.form['depth']
+    wall_type = request.form['wall_type']
+    elevated_floor = request.form['elevated_floor']
+    slab = request.form['slab']
+    cable_types = request.form['cable_types']
+    connector_types = request.form['connector_types']
+    equipment = request.form['equipment']
 
-    if not client or not service or not date:
-        flash('Preencha todos os campos obrigatórios.', 'error')
-        return redirect(url_for('relatorios'))
+    html_content = render_template('report_template.html', client=client, contact=contact,
+                                   installation_address=installation_address, work_description=work_description,
+                                   start_date=start_date, end_date=end_date, work_order_number=work_order_number,
+                                   general_description=general_description, environment_description=environment_description,
+                                   ceiling_type=ceiling_type, ceiling_height=ceiling_height, width=width, depth=depth,
+                                   wall_type=wall_type, elevated_floor=elevated_floor, slab=slab,
+                                   cable_types=cable_types, connector_types=connector_types, equipment=equipment)
 
-    # Garante que o nome do arquivo PDF seja válido
-    pdf_filename = f"relatorio_{client.replace(' ', '_')}_{date.replace('/', '-')}.pdf"
+    pdf_filename = f"relatorio_{client.replace(' ', '_')}_{start_date.replace('/', '-')}.pdf"
     pdf_file = os.path.join('static', pdf_filename)
-    
-    c = canvas.Canvas(pdf_file, pagesize=A4)
-    c.drawString(100, 750, f"Cliente: {client}")
-    c.drawString(100, 735, f"Serviço Realizado: {service}")
-    c.drawString(100, 720, f"Data: {date}")
-    c.drawString(100, 705, f"Descrição: {description}")
-    c.showPage()
-    c.save()
 
-    # Salvar relatório no banco de dados
-    new_report = Report(client=client, service=service, date=date, description=description, filename=pdf_filename)
+    HTML(string=html_content).write_pdf(pdf_file)
+
+    new_report = Report(client=client, service=work_description, date=start_date, description=general_description, filename=pdf_filename)
     db.session.add(new_report)
     db.session.commit()
 
     message = f"Relatório {pdf_filename} gerado com sucesso!"
     pdf_link = url_for('static', filename=pdf_filename)
     return render_template('report.html', message=message, pdf_link=pdf_link)
+
 
 # Rota para exibir os relatórios
 @app.route('/relatorios')

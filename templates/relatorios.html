@@ -20,7 +20,7 @@
             {% for report in reports %}
             <tr>
                 <td>{{ report.client }}</td>
-                <td>{{ report.service }}</td>
+                <td><a href="{{ url_for('visualizar_relatorio', filename=report.filename) }}">Visualizar PDF</a></td>
                 <td>{{ report.date }}</td>
                 <!-- Adicione mais colunas conforme necessário -->
             </tr>

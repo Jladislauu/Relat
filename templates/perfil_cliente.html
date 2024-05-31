@@ -18,7 +18,12 @@
         <li><a href="{{ url_for('visualizar_relatorio', filename=report.filename) }}">{{ report.filename }}</a></li>
         {% endfor %}
     </ul>
-
+    <div>
+        {% extends 'base.html' %}
+{% block content %}
+    {% include 'redirecionamento.html' %}
+{% endblock %}
+        <div>
    
 </body>
 </html>
