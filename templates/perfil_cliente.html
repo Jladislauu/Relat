@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Cliente</title>
+</head>
+<body>
+    <h1>Perfil do Cliente</h1>
+    <h2>Dados do Cliente</h2>
+    <p><strong>Nome:</strong> {{ client.name }}</p>
+    <p><strong>Endereço:</strong> {{ client.address }}</p>
+    <p><strong>Telefone:</strong> {{ client.phone }}</p>
+
+    <h2>Relatórios Associados</h2>
+    <ul>
+        {% for report in client_reports %}
+        <li><a href="{{ url_for('visualizar_relatorio', filename=report.filename) }}">{{ report.filename }}</a></li>
+        {% endfor %}
+    </ul>
+    <div>
+        {% extends 'base.html' %}
+{% block content %}
+    {% include 'redirecionamento.html' %}
+{% endblock %}
+        <div>
+   
+</body>
+</html>
